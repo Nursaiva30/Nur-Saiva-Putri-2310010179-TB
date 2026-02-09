@@ -1,187 +1,177 @@
-import form.JabatanForm;
-import form.KaryawanForm;
-import form.PenggajianForm;
-import laporan.LaporanKaryawan;
-import laporan.LaporanPenggajian;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 
-import javax.swing.*;
-import java.awt.*;
+import form.JabatanPanel;
+import form.KaryawanPanel;
+import form.PenggajianPanel;
+import laporan.LaporanKaryawanPanel;
+import laporan.LaporanPenggajianPanel;
 
 /**
- * Main Frame Aplikasi Kepegawaian
- * Nur Saiva Putri - 2310010179
+ * Aplikasi Kepegawaian - Nur Saiva Putri (2310010179)
+ * @author Saputra
  */
-public class MainFrame extends JFrame {
-    
-    private JPanel contentPanel;
-    private CardLayout cardLayout;
-    
-    // Form instances
-    private JabatanForm jabatanForm;
-    private KaryawanForm karyawanForm;
-    private PenggajianForm penggajianForm;
-    private LaporanKaryawan laporanKaryawan;
-    private LaporanPenggajian laporanPenggajian;
-    
+public class MainFrame extends javax.swing.JFrame {
+
+    /**
+     * Creates new form MainFrame
+     */
     public MainFrame() {
-        setTitle("Aplikasi Kepegawaian - Nur Saiva Putri (2310010179)");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 650);
+        initComponents();
+        setupPanels();
         setLocationRelativeTo(null);
-        
-        // Create menu bar
-        setJMenuBar(createMenuBar());
-        
-        // Create content panel with CardLayout
-        cardLayout = new CardLayout();
-        contentPanel = new JPanel(cardLayout);
-        
-        // Add welcome panel
-        contentPanel.add(createWelcomePanel(), "welcome");
-        
-        // Initialize forms
-        jabatanForm = new JabatanForm();
-        karyawanForm = new KaryawanForm();
-        penggajianForm = new PenggajianForm();
-        laporanKaryawan = new LaporanKaryawan();
-        laporanPenggajian = new LaporanPenggajian();
-        
-        // Add forms to content panel
-        contentPanel.add(jabatanForm, "jabatan");
-        contentPanel.add(karyawanForm, "karyawan");
-        contentPanel.add(penggajianForm, "penggajian");
-        contentPanel.add(laporanKaryawan, "laporan_karyawan");
-        contentPanel.add(laporanPenggajian, "laporan_penggajian");
-        
-        add(contentPanel, BorderLayout.CENTER);
-        
-        // Show welcome panel by default
-        cardLayout.show(contentPanel, "welcome");
     }
     
-    private JMenuBar createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        
-        // Menu Master Data
-        JMenu menuMaster = new JMenu("Master Data");
-        
-        JMenuItem menuJabatan = new JMenuItem("Data Jabatan");
-        menuJabatan.addActionListener(e -> cardLayout.show(contentPanel, "jabatan"));
-        menuMaster.add(menuJabatan);
-        
-        JMenuItem menuKaryawan = new JMenuItem("Data Karyawan");
-        menuKaryawan.addActionListener(e -> {
-            karyawanForm.refreshJabatan();
-            cardLayout.show(contentPanel, "karyawan");
-        });
-        menuMaster.add(menuKaryawan);
-        
-        menuBar.add(menuMaster);
-        
-        // Menu Transaksi
-        JMenu menuTransaksi = new JMenu("Transaksi");
-        
-        JMenuItem menuPenggajian = new JMenuItem("Penggajian");
-        menuPenggajian.addActionListener(e -> {
-            penggajianForm.refreshKaryawan();
-            cardLayout.show(contentPanel, "penggajian");
-        });
-        menuTransaksi.add(menuPenggajian);
-        
-        menuBar.add(menuTransaksi);
-        
-        // Menu Laporan
-        JMenu menuLaporan = new JMenu("Laporan");
-        
-        JMenuItem menuLapKaryawan = new JMenuItem("Laporan Karyawan");
-        menuLapKaryawan.addActionListener(e -> cardLayout.show(contentPanel, "laporan_karyawan"));
-        menuLaporan.add(menuLapKaryawan);
-        
-        JMenuItem menuLapPenggajian = new JMenuItem("Laporan Penggajian");
-        menuLapPenggajian.addActionListener(e -> cardLayout.show(contentPanel, "laporan_penggajian"));
-        menuLaporan.add(menuLapPenggajian);
-        
-        menuBar.add(menuLaporan);
-        
-        // Menu Keluar
-        JMenu menuApp = new JMenu("Aplikasi");
-        
-        JMenuItem menuHome = new JMenuItem("Beranda");
-        menuHome.addActionListener(e -> cardLayout.show(contentPanel, "welcome"));
-        menuApp.add(menuHome);
-        
-        menuApp.addSeparator();
-        
-        JMenuItem menuKeluar = new JMenuItem("Keluar");
-        menuKeluar.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(this, 
-                "Yakin ingin keluar dari aplikasi?", 
-                "Konfirmasi", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                System.exit(0);
+    private void setupPanels() {
+        // Initialize and add panels to tabbed pane
+        tabbedPane.addTab("Data Jabatan", new JabatanPanel());
+        tabbedPane.addTab("Data Karyawan", new KaryawanPanel());
+        tabbedPane.addTab("Penggajian", new PenggajianPanel());
+        tabbedPane.addTab("Lap. Karyawan", new LaporanKaryawanPanel());
+        tabbedPane.addTab("Lap. Penggajian", new LaporanPenggajianPanel());
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        tabbedPane = new javax.swing.JTabbedPane();
+        pnlBeranda = new javax.swing.JPanel();
+        lblWelcome = new javax.swing.JLabel();
+        lblAppName = new javax.swing.JLabel();
+        lblAuthor = new javax.swing.JLabel();
+        menuBar = new javax.swing.JMenuBar();
+        menuApp = new javax.swing.JMenu();
+        menuItemKeluar = new javax.swing.JMenuItem();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Aplikasi Kepegawaian - Nur Saiva Putri (2310010179)");
+
+        lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblWelcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblWelcome.setText("Selamat Datang");
+
+        lblAppName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblAppName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAppName.setText("Aplikasi Sistem Kepegawaian");
+
+        lblAuthor.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
+        lblAuthor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAuthor.setText("Nur Saiva Putri - 2310010179");
+
+        javax.swing.GroupLayout pnlBerandaLayout = new javax.swing.GroupLayout(pnlBeranda);
+        pnlBeranda.setLayout(pnlBerandaLayout);
+        pnlBerandaLayout.setHorizontalGroup(
+            pnlBerandaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBerandaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlBerandaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblWelcome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblAppName, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
+                    .addComponent(lblAuthor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        pnlBerandaLayout.setVerticalGroup(
+            pnlBerandaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBerandaLayout.createSequentialGroup()
+                .addGap(150, 150, 150)
+                .addComponent(lblWelcome)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblAppName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblAuthor)
+                .addContainerGap(250, Short.MAX_VALUE))
+        );
+
+        tabbedPane.addTab("Beranda", pnlBeranda);
+
+        menuApp.setText("Aplikasi");
+
+        menuItemKeluar.setText("Keluar");
+        menuItemKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemKeluarActionPerformed(evt);
             }
         });
-        menuApp.add(menuKeluar);
-        
+        menuApp.add(menuItemKeluar);
+
         menuBar.add(menuApp);
-        
-        return menuBar;
-    }
-    
-    private JPanel createWelcomePanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        
-        JPanel card = new JPanel();
-        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-        card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createEtchedBorder(),
-            BorderFactory.createEmptyBorder(30, 50, 30, 50)
-        ));
-        
-        JLabel lblWelcome = new JLabel("Selamat Datang");
-        lblWelcome.setFont(new Font("Dialog", Font.BOLD, 24));
-        lblWelcome.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        JLabel lblApp = new JLabel("Aplikasi Sistem Kepegawaian");
-        lblApp.setFont(new Font("Dialog", Font.PLAIN, 16));
-        lblApp.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        JLabel lblLine = new JLabel("────────────────────");
-        lblLine.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        JLabel lblInfo = new JLabel("<html><center>" +
-            "Fitur Aplikasi:<br/><br/>" +
-            "• CRUD Data Jabatan<br/>" +
-            "• CRUD Data Karyawan<br/>" +
-            "• Transaksi Penggajian<br/>" +
-            "• Laporan Karyawan (CSV)<br/>" +
-            "• Laporan Penggajian (CSV)" +
-            "</center></html>");
-        lblInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        JLabel lblAuthor = new JLabel("Nur Saiva Putri - 2310010179");
-        lblAuthor.setFont(new Font("Dialog", Font.ITALIC, 11));
-        lblAuthor.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        card.add(lblWelcome);
-        card.add(Box.createVerticalStrut(5));
-        card.add(lblApp);
-        card.add(Box.createVerticalStrut(15));
-        card.add(lblLine);
-        card.add(Box.createVerticalStrut(15));
-        card.add(lblInfo);
-        card.add(Box.createVerticalStrut(20));
-        card.add(lblAuthor);
-        
-        panel.add(card);
-        
-        return panel;
-    }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            MainFrame frame = new MainFrame();
-            frame.setVisible(true);
+
+        setJMenuBar(menuBar);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void menuItemKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemKeluarActionPerformed
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this, 
+            "Yakin ingin keluar dari aplikasi?", 
+            "Konfirmasi", javax.swing.JOptionPane.YES_NO_OPTION);
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_menuItemKeluarActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainFrame().setVisible(true);
+            }
         });
     }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel lblAppName;
+    private javax.swing.JLabel lblAuthor;
+    private javax.swing.JLabel lblWelcome;
+    private javax.swing.JMenu menuApp;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem menuItemKeluar;
+    private javax.swing.JPanel pnlBeranda;
+    private javax.swing.JTabbedPane tabbedPane;
+    // End of variables declaration//GEN-END:variables
 }
