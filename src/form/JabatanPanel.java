@@ -155,7 +155,35 @@ public class JabatanPanel extends javax.swing.JPanel {
         selectedId = -1;
         tblJabatan.clearSelection();
     }
+    
+    private void searchData() {
+    tableModel.setRowCount(0);
+    String keyword = txtSearch.getText().trim();
 
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pst = conn.prepareStatement(
+             "SELECT * FROM jabatan WHERE nama_jabatan LIKE ? ORDER BY id_jabatan")) {
+
+        pst.setString(1, "%" + keyword + "%");
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            Object[] row = {
+                rs.getInt("id_jabatan"),
+                rs.getString("nama_jabatan"),
+                rs.getDouble("gaji_pokok"),
+                rs.getDouble("tunjangan")
+            };
+            tableModel.addRow(row);
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this,
+            "Error pencarian: " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+    
     private boolean validateForm() {
         if (txtNamaJabatan.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Nama Jabatan harus diisi!", 
@@ -194,6 +222,8 @@ public class JabatanPanel extends javax.swing.JPanel {
         btnUpdate = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblJabatan = new javax.swing.JTable();
 
@@ -237,6 +267,19 @@ public class JabatanPanel extends javax.swing.JPanel {
             }
         });
 
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlFormLayout = new javax.swing.GroupLayout(pnlForm);
         pnlForm.setLayout(pnlFormLayout);
         pnlFormLayout.setHorizontalGroup(
@@ -255,14 +298,19 @@ public class JabatanPanel extends javax.swing.JPanel {
                             .addComponent(txtGajiPokok)
                             .addComponent(txtTunjangan)))
                     .addGroup(pnlFormLayout.createSequentialGroup()
-                        .addComponent(btnSimpan)
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addComponent(btnSimpan)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnUpdate)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnHapus)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnUpdate)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnHapus)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnClear)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnClear)
+                            .addComponent(btnSearch))
+                        .addGap(0, 10, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlFormLayout.setVerticalGroup(
@@ -286,12 +334,20 @@ public class JabatanPanel extends javax.swing.JPanel {
                     .addComponent(btnUpdate)
                     .addComponent(btnHapus)
                     .addComponent(btnClear))
+                .addGap(26, 26, 26)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tblJabatan.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
-            new String [] {"ID", "Nama Jabatan", "Gaji Pokok", "Tunjangan"}
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Nama Jabatan", "Gaji Pokok", "Tunjangan"
+            }
         ));
         jScrollPane1.setViewportView(tblJabatan);
 
@@ -306,7 +362,7 @@ public class JabatanPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -335,13 +391,23 @@ public class JabatanPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        clearForm();
+        txtSearch.setText("");
+        loadData();
     }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+       searchData();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JScrollPane jScrollPane1;
@@ -353,6 +419,7 @@ public class JabatanPanel extends javax.swing.JPanel {
     private javax.swing.JTable tblJabatan;
     private javax.swing.JTextField txtGajiPokok;
     private javax.swing.JTextField txtNamaJabatan;
+    private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtTunjangan;
     // End of variables declaration//GEN-END:variables
 }

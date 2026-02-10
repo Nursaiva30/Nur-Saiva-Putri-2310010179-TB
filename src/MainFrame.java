@@ -42,55 +42,15 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        menuBar = new javax.swing.JMenuBar();
+        menuApp = new javax.swing.JMenu();
+        menuItemKeluar = new javax.swing.JMenuItem();
         tabbedPane = new javax.swing.JTabbedPane();
         pnlBeranda = new javax.swing.JPanel();
         lblWelcome = new javax.swing.JLabel();
         lblAppName = new javax.swing.JLabel();
         lblAuthor = new javax.swing.JLabel();
-        menuBar = new javax.swing.JMenuBar();
-        menuApp = new javax.swing.JMenu();
-        menuItemKeluar = new javax.swing.JMenuItem();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Aplikasi Kepegawaian - Nur Saiva Putri (2310010179)");
-
-        lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        lblWelcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblWelcome.setText("Selamat Datang");
-
-        lblAppName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblAppName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblAppName.setText("Aplikasi Sistem Kepegawaian");
-
-        lblAuthor.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
-        lblAuthor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblAuthor.setText("Nur Saiva Putri - 2310010179");
-
-        javax.swing.GroupLayout pnlBerandaLayout = new javax.swing.GroupLayout(pnlBeranda);
-        pnlBeranda.setLayout(pnlBerandaLayout);
-        pnlBerandaLayout.setHorizontalGroup(
-            pnlBerandaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlBerandaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlBerandaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblWelcome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblAppName, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
-                    .addComponent(lblAuthor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        pnlBerandaLayout.setVerticalGroup(
-            pnlBerandaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlBerandaLayout.createSequentialGroup()
-                .addGap(150, 150, 150)
-                .addComponent(lblWelcome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblAppName)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblAuthor)
-                .addContainerGap(250, Short.MAX_VALUE))
-        );
-
-        tabbedPane.addTab("Beranda", pnlBeranda);
+        jLabel1 = new javax.swing.JLabel();
 
         menuApp.setText("Aplikasi");
 
@@ -104,17 +64,65 @@ public class MainFrame extends javax.swing.JFrame {
 
         menuBar.add(menuApp);
 
-        setJMenuBar(menuBar);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Aplikasi Kepegawaian - Nur Saiva Putri (2310010179)");
+
+        lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblWelcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblWelcome.setText("Selamat Datang");
+
+        lblAppName.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblAppName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAppName.setText("Aplikasi Sistem Kepegawaian");
+
+        lblAuthor.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
+        lblAuthor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAuthor.setText("Nur Saiva Putri - 2310010179");
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asset/logo.png"))); // NOI18N
+        jLabel1.setText("jLabel1");
+
+        javax.swing.GroupLayout pnlBerandaLayout = new javax.swing.GroupLayout(pnlBeranda);
+        pnlBeranda.setLayout(pnlBerandaLayout);
+        pnlBerandaLayout.setHorizontalGroup(
+            pnlBerandaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBerandaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlBerandaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblAppName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblAuthor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addComponent(lblWelcome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlBerandaLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1449, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnlBerandaLayout.setVerticalGroup(
+            pnlBerandaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBerandaLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(lblWelcome)
+                .addGap(26, 26, 26)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 534, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(lblAppName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblAuthor)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        tabbedPane.addTab("Beranda", pnlBeranda);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
+            .addComponent(tabbedPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+            .addComponent(tabbedPane)
         );
 
         pack();
@@ -165,6 +173,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblAppName;
     private javax.swing.JLabel lblAuthor;
     private javax.swing.JLabel lblWelcome;

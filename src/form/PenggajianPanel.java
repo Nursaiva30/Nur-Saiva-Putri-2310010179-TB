@@ -84,7 +84,7 @@ public class PenggajianPanel extends javax.swing.JPanel {
     private void loadData() {
         tableModel.setRowCount(0);
         String query = "SELECT p.id_penggajian, p.tanggal_gaji, k.nama_karyawan, j.nama_jabatan, " +
-                      "(j.gaji_pokok + j.tunjangan) as total_gaji " +
+                      "p.total_gaji " +
                       "FROM penggajian p " +
                       "JOIN karyawan k ON p.id_karyawan = k.id_karyawan " +
                       "JOIN jabatan j ON k.id_jabatan = j.id_jabatan " +
@@ -131,17 +131,28 @@ public class PenggajianPanel extends javax.swing.JPanel {
                 "Peringatan", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        if (!karyawanMap.containsKey(selected) || !gajiMap.containsKey(selected)) {
+            JOptionPane.showMessageDialog(this, "Data karyawan tidak valid, silakan refresh data.", 
+                "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         
         int confirm = JOptionPane.showConfirmDialog(this, 
             "Proses penggajian untuk " + selected + "?", 
             "Konfirmasi", JOptionPane.YES_NO_OPTION);
         
         if (confirm == JOptionPane.YES_OPTION) {
+            double[] gaji = gajiMap.get(selected);
+            double totalGaji = gaji[0] + gaji[1];
             try (Connection conn = DatabaseConnection.getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(
-                     "INSERT INTO penggajian (id_karyawan, tanggal_gaji) VALUES (?, CURDATE())")) {
+                     "INSERT INTO penggajian (id_karyawan, tanggal_gaji, potongan, total_gaji, keterangan) " +
+                     "VALUES (?, CURDATE(), ?, ?, ?)")) {
                 
                 pstmt.setInt(1, karyawanMap.get(selected));
+                pstmt.setDouble(2, 0);
+                pstmt.setDouble(3, totalGaji);
+                pstmt.setString(4, "Gaji diproses via aplikasi");
                 pstmt.executeUpdate();
                 
                 JOptionPane.showMessageDialog(this, "Penggajian berhasil diproses!");
@@ -156,6 +167,44 @@ public class PenggajianPanel extends javax.swing.JPanel {
     public void refreshKaryawan() {
         loadKaryawan();
     }
+    private void searchData() {
+    tableModel.setRowCount(0);
+    String keyword = txtSearch.getText().trim();
+
+    String query = "SELECT p.id_penggajian, p.tanggal_gaji, k.nama_karyawan, " +
+                   "j.nama_jabatan, p.total_gaji " +
+                   "FROM penggajian p " +
+                   "JOIN karyawan k ON p.id_karyawan = k.id_karyawan " +
+                   "JOIN jabatan j ON k.id_jabatan = j.id_jabatan " +
+                   "WHERE k.nama_karyawan LIKE ? " +
+                   "   OR j.nama_jabatan LIKE ? " +
+                   "ORDER BY p.tanggal_gaji DESC, p.id_penggajian DESC";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pst = conn.prepareStatement(query)) {
+
+        pst.setString(1, "%" + keyword + "%");
+        pst.setString(2, "%" + keyword + "%");
+
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            Object[] row = {
+                rs.getInt("id_penggajian"),
+                rs.getDate("tanggal_gaji"),
+                rs.getString("nama_karyawan"),
+                rs.getString("nama_jabatan"),
+                currencyFormat.format(rs.getDouble("total_gaji"))
+            };
+            tableModel.addRow(row);
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this,
+            "Error pencarian: " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -178,6 +227,8 @@ public class PenggajianPanel extends javax.swing.JPanel {
         txtTotalGaji = new javax.swing.JTextField();
         btnProses = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPenggajian = new javax.swing.JTable();
 
@@ -225,6 +276,19 @@ public class PenggajianPanel extends javax.swing.JPanel {
             }
         });
 
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlFormLayout = new javax.swing.GroupLayout(pnlForm);
         pnlForm.setLayout(pnlFormLayout);
         pnlFormLayout.setHorizontalGroup(
@@ -234,21 +298,28 @@ public class PenggajianPanel extends javax.swing.JPanel {
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlFormLayout.createSequentialGroup()
                         .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblKaryawan)
-                            .addComponent(lblGajiPokok)
-                            .addComponent(lblTunjangan)
-                            .addComponent(lblTotalGaji))
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cmbKaryawan, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtGajiPokok)
-                            .addComponent(txtTunjangan)
-                            .addComponent(txtTotalGaji, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)))
-                    .addGroup(pnlFormLayout.createSequentialGroup()
-                        .addComponent(btnProses)
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblKaryawan)
+                                    .addComponent(lblGajiPokok)
+                                    .addComponent(lblTunjangan)
+                                    .addComponent(lblTotalGaji))
+                                .addGap(18, 18, 18)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cmbKaryawan, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtGajiPokok)
+                                    .addComponent(txtTunjangan)
+                                    .addComponent(txtTotalGaji, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)))
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addComponent(btnProses)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnRefresh)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormLayout.createSequentialGroup()
+                        .addComponent(txtSearch)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRefresh)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnSearch)))
+                .addContainerGap())
         );
         pnlFormLayout.setVerticalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,12 +344,20 @@ public class PenggajianPanel extends javax.swing.JPanel {
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnProses)
                     .addComponent(btnRefresh))
+                .addGap(18, 18, 18)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tblPenggajian.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
-            new String [] {"ID", "Tanggal", "Karyawan", "Jabatan", "Total Gaji"}
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Tanggal", "Karyawan", "Jabatan", "Total Gaji"
+            }
         ));
         jScrollPane1.setViewportView(tblPenggajian);
 
@@ -322,10 +401,19 @@ public class PenggajianPanel extends javax.swing.JPanel {
         loadData();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        searchData();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnProses;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cmbKaryawan;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblGajiPokok;
@@ -336,6 +424,7 @@ public class PenggajianPanel extends javax.swing.JPanel {
     private javax.swing.JPanel pnlForm;
     private javax.swing.JTable tblPenggajian;
     private javax.swing.JTextField txtGajiPokok;
+    private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtTotalGaji;
     private javax.swing.JTextField txtTunjangan;
     // End of variables declaration//GEN-END:variables

@@ -67,37 +67,47 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lblNama" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblJenisKelamin" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblJabatan" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblTelepon" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblAlamat" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="lblNama" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblJenisKelamin" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblJabatan" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblTelepon" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblAlamat" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="txtNama" max="32767" attributes="0"/>
+                                      <Component id="cmbJenisKelamin" max="32767" attributes="0"/>
+                                      <Component id="cmbJabatan" max="32767" attributes="0"/>
+                                      <Component id="txtTelepon" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane2" pref="150" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="btnSimpan" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnUpdate" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnHapus" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnClear" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="txtNama" max="32767" attributes="0"/>
-                              <Component id="cmbJenisKelamin" max="32767" attributes="0"/>
-                              <Component id="cmbJabatan" max="32767" attributes="0"/>
-                              <Component id="txtTelepon" max="32767" attributes="0"/>
-                              <Component id="jScrollPane2" pref="150" max="32767" attributes="0"/>
-                          </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="btnSimpan" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="txtSearch" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnUpdate" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnHapus" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnClear" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnSearch" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -135,6 +145,11 @@
                       <Component id="btnUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnHapus" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnClear" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="txtSearch" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnSearch" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -236,6 +251,19 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClearActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtSearch">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtSearchActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnSearch">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Search"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

@@ -17,7 +17,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Panel Laporan untuk menampilkan data Penggajian
- * @author Saputra
+ * @author 
  */
 public class LaporanPenggajianPanel extends javax.swing.JPanel {
 
@@ -62,7 +62,7 @@ public class LaporanPenggajianPanel extends javax.swing.JPanel {
         
         String query = "SELECT p.id_penggajian, p.tanggal_gaji, k.nama_karyawan, " +
                       "j.nama_jabatan, j.gaji_pokok, j.tunjangan, " +
-                      "(j.gaji_pokok + j.tunjangan) as total_gaji " +
+                      "p.total_gaji " +
                       "FROM penggajian p " +
                       "JOIN karyawan k ON p.id_karyawan = k.id_karyawan " +
                       "JOIN jabatan j ON k.id_jabatan = j.id_jabatan " +

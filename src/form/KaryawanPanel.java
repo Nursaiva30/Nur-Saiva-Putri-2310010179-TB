@@ -201,7 +201,46 @@ public class KaryawanPanel extends javax.swing.JPanel {
         selectedId = -1;
         tblKaryawan.clearSelection();
     }
+       private void searchData() {
+    tableModel.setRowCount(0);
+    String keyword = txtSearch.getText().trim();
 
+    String query = "SELECT k.id_karyawan, k.nama_karyawan, k.jenis_kelamin, " +
+                   "j.nama_jabatan, k.no_telepon, k.alamat " +
+                   "FROM karyawan k " +
+                   "LEFT JOIN jabatan j ON k.id_jabatan = j.id_jabatan " +
+                   "WHERE k.nama_karyawan LIKE ? " +
+                   "   OR j.nama_jabatan LIKE ? " +
+                   "ORDER BY k.id_karyawan";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pst = conn.prepareStatement(query)) {
+
+        pst.setString(1, "%" + keyword + "%");
+        pst.setString(2, "%" + keyword + "%");
+
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            Object[] row = {
+                rs.getInt("id_karyawan"),
+                rs.getString("nama_karyawan"),
+                rs.getString("jenis_kelamin"),
+                rs.getString("nama_jabatan"),
+                rs.getString("no_telepon"),
+                rs.getString("alamat")
+            };
+            tableModel.addRow(row);
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this,
+            "Error pencarian: " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+       
     private boolean validateForm() {
         if (txtNama.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Nama Karyawan harus diisi!", 
@@ -246,6 +285,8 @@ public class KaryawanPanel extends javax.swing.JPanel {
         btnUpdate = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblKaryawan = new javax.swing.JTable();
 
@@ -301,6 +342,19 @@ public class KaryawanPanel extends javax.swing.JPanel {
             }
         });
 
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlFormLayout = new javax.swing.GroupLayout(pnlForm);
         pnlForm.setLayout(pnlFormLayout);
         pnlFormLayout.setHorizontalGroup(
@@ -310,27 +364,34 @@ public class KaryawanPanel extends javax.swing.JPanel {
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlFormLayout.createSequentialGroup()
                         .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblNama)
-                            .addComponent(lblJenisKelamin)
-                            .addComponent(lblJabatan)
-                            .addComponent(lblTelepon)
-                            .addComponent(lblAlamat))
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNama)
-                            .addComponent(cmbJenisKelamin, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbJabatan, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtTelepon)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
-                    .addGroup(pnlFormLayout.createSequentialGroup()
-                        .addComponent(btnSimpan)
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblNama)
+                                    .addComponent(lblJenisKelamin)
+                                    .addComponent(lblJabatan)
+                                    .addComponent(lblTelepon)
+                                    .addComponent(lblAlamat))
+                                .addGap(18, 18, 18)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtNama)
+                                    .addComponent(cmbJenisKelamin, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbJabatan, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtTelepon)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addComponent(btnSimpan)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnUpdate)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnHapus)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnClear)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormLayout.createSequentialGroup()
+                        .addComponent(txtSearch)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnUpdate)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnHapus)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnClear)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnSearch)))
+                .addContainerGap())
         );
         pnlFormLayout.setVerticalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -361,12 +422,20 @@ public class KaryawanPanel extends javax.swing.JPanel {
                     .addComponent(btnUpdate)
                     .addComponent(btnHapus)
                     .addComponent(btnClear))
+                .addGap(18, 18, 18)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tblKaryawan.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
-            new String [] {"ID", "Nama Karyawan", "JK", "Jabatan", "No. Telepon", "Alamat"}
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Nama Karyawan", "JK", "Jabatan", "No. Telepon", "Alamat"
+            }
         ));
         jScrollPane1.setViewportView(tblKaryawan);
 
@@ -413,10 +482,19 @@ public class KaryawanPanel extends javax.swing.JPanel {
         clearForm();
     }//GEN-LAST:event_btnClearActionPerformed
 
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        searchData();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbJabatan;
@@ -433,6 +511,7 @@ public class KaryawanPanel extends javax.swing.JPanel {
     private javax.swing.JTable tblKaryawan;
     private javax.swing.JTextArea txtAlamat;
     private javax.swing.JTextField txtNama;
+    private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtTelepon;
     // End of variables declaration//GEN-END:variables
 }
