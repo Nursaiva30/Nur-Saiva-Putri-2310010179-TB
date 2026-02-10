@@ -84,7 +84,7 @@ public class PenggajianPanel extends javax.swing.JPanel {
     private void loadData() {
         tableModel.setRowCount(0);
         String query = "SELECT p.id_penggajian, p.tanggal_gaji, k.nama_karyawan, j.nama_jabatan, " +
-                      "(j.gaji_pokok + j.tunjangan) as total_gaji " +
+                      "p.total_gaji " +
                       "FROM penggajian p " +
                       "JOIN karyawan k ON p.id_karyawan = k.id_karyawan " +
                       "JOIN jabatan j ON k.id_jabatan = j.id_jabatan " +
@@ -131,17 +131,28 @@ public class PenggajianPanel extends javax.swing.JPanel {
                 "Peringatan", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        if (!karyawanMap.containsKey(selected) || !gajiMap.containsKey(selected)) {
+            JOptionPane.showMessageDialog(this, "Data karyawan tidak valid, silakan refresh data.", 
+                "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         
         int confirm = JOptionPane.showConfirmDialog(this, 
             "Proses penggajian untuk " + selected + "?", 
             "Konfirmasi", JOptionPane.YES_NO_OPTION);
         
         if (confirm == JOptionPane.YES_OPTION) {
+            double[] gaji = gajiMap.get(selected);
+            double totalGaji = gaji[0] + gaji[1];
             try (Connection conn = DatabaseConnection.getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(
-                     "INSERT INTO penggajian (id_karyawan, tanggal_gaji) VALUES (?, CURDATE())")) {
+                     "INSERT INTO penggajian (id_karyawan, tanggal_gaji, potongan, total_gaji, keterangan) " +
+                     "VALUES (?, CURDATE(), ?, ?, ?)")) {
                 
                 pstmt.setInt(1, karyawanMap.get(selected));
+                pstmt.setDouble(2, 0);
+                pstmt.setDouble(3, totalGaji);
+                pstmt.setString(4, "Gaji diproses via aplikasi");
                 pstmt.executeUpdate();
                 
                 JOptionPane.showMessageDialog(this, "Penggajian berhasil diproses!");

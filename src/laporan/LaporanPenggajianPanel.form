@@ -111,9 +111,6 @@
         </Component>
         <Component class="javax.swing.JSpinner" name="spnTanggalAwal">
           <Properties>
-            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="Wed Jan 01 00:00:00 WIB 2025" type="date"/>
-            </Property>
             <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new javax.swing.JSpinner.DateEditor(spnTanggalAwal, &quot;dd-MM-yyyy&quot;)" type="code"/>
             </Property>
@@ -126,9 +123,6 @@
         </Component>
         <Component class="javax.swing.JSpinner" name="spnTanggalAkhir">
           <Properties>
-            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="Wed Jan 01 00:00:00 WIB 2025" type="date"/>
-            </Property>
             <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new javax.swing.JSpinner.DateEditor(spnTanggalAkhir, &quot;dd-MM-yyyy&quot;)" type="code"/>
             </Property>

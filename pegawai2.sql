@@ -1,6 +1,6 @@
 -- 1. Buat Database
-CREATE DATABASE db_kepegawaian;
-USE db_kepegawaian;
+CREATE DATABASE pegawai2;
+USE pegawai2;
 
 -- ==========================================
 -- TABEL MASTER 1: JABATAN
